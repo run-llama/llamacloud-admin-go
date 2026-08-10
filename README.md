@@ -56,7 +56,7 @@ func main() {
 	client := llamacloudadmin.NewClient(
 		option.WithAPIKey("My API Key"), // defaults to os.LookupEnv("LLAMA_CLOUD_API_KEY")
 	)
-	organizationMembers, err := client.Organizations.Users.List(context.TODO(), "my-organization-id")
+	organizationMembers, err := client.Organizations.Users.ListMembers(context.TODO(), "my-organization-id")
 	if err != nil {
 		panic(err.Error())
 	}

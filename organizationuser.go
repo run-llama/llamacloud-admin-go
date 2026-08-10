@@ -39,18 +39,6 @@ func NewOrganizationUserService(opts ...option.RequestOption) (r OrganizationUse
 	return
 }
 
-// Get all users in an organization.
-func (r *OrganizationUserService) List(ctx context.Context, organizationID string, opts ...option.RequestOption) (res *[]OrganizationMember, err error) {
-	opts = slices.Concat(r.options, opts)
-	if organizationID == "" {
-		err = errors.New("missing required organization_id parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("api/v1/organizations/%s/users", organizationID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return res, err
-}
-
 // Remove users from an organization.
 func (r *OrganizationUserService) Delete(ctx context.Context, memberUserID string, params OrganizationUserDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.options, opts)
@@ -105,6 +93,18 @@ func (r *OrganizationUserService) AssignRole(ctx context.Context, organizationID
 	}
 	path := fmt.Sprintf("api/v1/organizations/%s/users/roles", organizationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
+	return res, err
+}
+
+// Get all users in an organization.
+func (r *OrganizationUserService) ListMembers(ctx context.Context, organizationID string, opts ...option.RequestOption) (res *[]OrganizationMember, err error) {
+	opts = slices.Concat(r.options, opts)
+	if organizationID == "" {
+		err = errors.New("missing required organization_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("api/v1/organizations/%s/users", organizationID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return res, err
 }
 
