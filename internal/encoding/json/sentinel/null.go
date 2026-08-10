@@ -1,7 +1,7 @@
 package sentinel
 
 import (
-	"github.com/run-llama/llama-cloud-admin-go/internal/encoding/json/shims"
+	"github.com/run-llama/llamacloud-admin-go/internal/encoding/json/shims"
 	"reflect"
 	"sync"
 )

@@ -18,10 +18,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/run-llama/llama-cloud-admin-go/internal"
-	"github.com/run-llama/llama-cloud-admin-go/internal/apierror"
-	"github.com/run-llama/llama-cloud-admin-go/internal/apiform"
-	"github.com/run-llama/llama-cloud-admin-go/internal/apiquery"
+	"github.com/run-llama/llamacloud-admin-go/internal"
+	"github.com/run-llama/llamacloud-admin-go/internal/apierror"
+	"github.com/run-llama/llamacloud-admin-go/internal/apiform"
+	"github.com/run-llama/llamacloud-admin-go/internal/apiquery"
 )
 
 func getDefaultHeaders() map[string]string {

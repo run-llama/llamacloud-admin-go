@@ -2,7 +2,7 @@ package param
 
 import (
 	"encoding/json"
-	"github.com/run-llama/llama-cloud-admin-go/internal/encoding/json/sentinel"
+	"github.com/run-llama/llamacloud-admin-go/internal/encoding/json/sentinel"
 	"reflect"
 )
 

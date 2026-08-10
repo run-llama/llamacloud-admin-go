@@ -1,7 +1,7 @@
 package apijson
 
 import (
-	"github.com/run-llama/llama-cloud-admin-go/packages/respjson"
+	"github.com/run-llama/llamacloud-admin-go/packages/respjson"
 	"reflect"
 )
 

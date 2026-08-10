@@ -9,12 +9,12 @@ import (
 	"slices"
 	"time"
 
-	"github.com/run-llama/llama-cloud-admin-go/internal/apijson"
-	"github.com/run-llama/llama-cloud-admin-go/internal/apiquery"
-	"github.com/run-llama/llama-cloud-admin-go/internal/requestconfig"
-	"github.com/run-llama/llama-cloud-admin-go/option"
-	"github.com/run-llama/llama-cloud-admin-go/packages/param"
-	"github.com/run-llama/llama-cloud-admin-go/packages/respjson"
+	"github.com/run-llama/llamacloud-admin-go/internal/apijson"
+	"github.com/run-llama/llamacloud-admin-go/internal/apiquery"
+	"github.com/run-llama/llamacloud-admin-go/internal/requestconfig"
+	"github.com/run-llama/llamacloud-admin-go/option"
+	"github.com/run-llama/llamacloud-admin-go/packages/param"
+	"github.com/run-llama/llamacloud-admin-go/packages/respjson"
 )
 
 // AdminService contains methods and other services that help with interacting with

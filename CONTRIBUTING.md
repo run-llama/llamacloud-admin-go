@@ -41,7 +41,7 @@ To use a local version of this library from source in another project, edit the 
 directive. This can be done through the CLI with the following:
 
 ```sh
-$ go mod edit -replace github.com/run-llama/llama-cloud-admin-go=/path/to/llama-cloud-admin-go
+$ go mod edit -replace github.com/run-llama/llamacloud-admin-go=/path/to/llamacloud-admin-go
 ```
 
 ## Running tests

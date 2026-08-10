@@ -3,8 +3,8 @@ package respjson_test
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/run-llama/llama-cloud-admin-go/internal/apijson"
-	rj "github.com/run-llama/llama-cloud-admin-go/packages/respjson"
+	"github.com/run-llama/llamacloud-admin-go/internal/apijson"
+	rj "github.com/run-llama/llamacloud-admin-go/packages/respjson"
 	"reflect"
 	"testing"
 )

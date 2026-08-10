@@ -8,9 +8,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/run-llama/llama-cloud-admin-go"
-	"github.com/run-llama/llama-cloud-admin-go/internal/testutil"
-	"github.com/run-llama/llama-cloud-admin-go/option"
+	"github.com/run-llama/llamacloud-admin-go"
+	"github.com/run-llama/llamacloud-admin-go/internal/testutil"
+	"github.com/run-llama/llamacloud-admin-go/option"
 )
 
 func TestInviteListWithOptionalParams(t *testing.T) {
