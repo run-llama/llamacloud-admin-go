@@ -80,14 +80,6 @@ func (r *AdminService) GetOcrStatus(ctx context.Context, opts ...option.RequestO
 	return res, err
 }
 
-// Return resolved S3 configuration and presigned URL signing details.
-func (r *AdminService) GetS3Config(ctx context.Context, opts ...option.RequestOption) (res *AdminGetS3ConfigResponse, err error) {
-	opts = slices.Concat(r.options, opts)
-	path := "api/v1/admin/s3/config"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return res, err
-}
-
 type AdminGetFilestoresInfoResponse struct {
 	// Any of "missing_buckets", "missing_credentials", "ok".
 	Status             AdminGetFilestoresInfoResponseStatus `json:"status" api:"required"`
@@ -281,85 +273,6 @@ const (
 	AdminGetOcrStatusResponseStatusDegraded    AdminGetOcrStatusResponseStatus = "degraded"
 	AdminGetOcrStatusResponseStatusOk          AdminGetOcrStatusResponseStatus = "ok"
 	AdminGetOcrStatusResponseStatusUnavailable AdminGetOcrStatusResponseStatus = "unavailable"
-)
-
-type AdminGetS3ConfigResponse struct {
-	Buckets AdminGetS3ConfigResponseBuckets `json:"buckets" api:"required"`
-	// Whether BYOC mode is enabled
-	ByocModeEnabled bool `json:"byoc_mode_enabled" api:"required"`
-	// Custom S3 endpoint URL (None = standard AWS)
-	EndpointURL string `json:"endpoint_url" api:"required"`
-	// Whether a KMS key ID is configured for server-side encryption
-	KmsKeyConfigured bool `json:"kms_key_configured" api:"required"`
-	// Signature version used when generating presigned URLs. 'unsigned' = s3proxy path
-	// (proxy handles auth), 's3v4' = explicit SigV4, 'default' = no override set
-	// (botocore default, may produce SigV2 without a region)
-	//
-	// Any of "default", "s3v4", "unsigned".
-	PresignedURLSignatureVersion AdminGetS3ConfigResponsePresignedURLSignatureVersion `json:"presigned_url_signature_version" api:"required"`
-	// Resolved value: whether requests are routed through s3proxy
-	S3ProxyActive bool `json:"s3_proxy_active" api:"required"`
-	// Explicit S3_PROXY_ENABLED override; None means auto-detect
-	S3ProxyEnabledOverride bool `json:"s3_proxy_enabled_override" api:"required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Buckets                      respjson.Field
-		ByocModeEnabled              respjson.Field
-		EndpointURL                  respjson.Field
-		KmsKeyConfigured             respjson.Field
-		PresignedURLSignatureVersion respjson.Field
-		S3ProxyActive                respjson.Field
-		S3ProxyEnabledOverride       respjson.Field
-		ExtraFields                  map[string]respjson.Field
-		raw                          string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r AdminGetS3ConfigResponse) RawJSON() string { return r.JSON.raw }
-func (r *AdminGetS3ConfigResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AdminGetS3ConfigResponseBuckets struct {
-	DocumentBucket              string `json:"document_bucket" api:"required"`
-	EtlBucket                   string `json:"etl_bucket" api:"required"`
-	ExternalComponentsBucket    string `json:"external_components_bucket" api:"required"`
-	FileParsingBucket           string `json:"file_parsing_bucket" api:"required"`
-	FileScreenshotBucket        string `json:"file_screenshot_bucket" api:"required"`
-	LlamaCloudParseOutputBucket string `json:"llama_cloud_parse_output_bucket" api:"required"`
-	LlamaExtractOutputBucket    string `json:"llama_extract_output_bucket" api:"required"`
-	RawFileBucket               string `json:"raw_file_bucket" api:"required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		DocumentBucket              respjson.Field
-		EtlBucket                   respjson.Field
-		ExternalComponentsBucket    respjson.Field
-		FileParsingBucket           respjson.Field
-		FileScreenshotBucket        respjson.Field
-		LlamaCloudParseOutputBucket respjson.Field
-		LlamaExtractOutputBucket    respjson.Field
-		RawFileBucket               respjson.Field
-		ExtraFields                 map[string]respjson.Field
-		raw                         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r AdminGetS3ConfigResponseBuckets) RawJSON() string { return r.JSON.raw }
-func (r *AdminGetS3ConfigResponseBuckets) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Signature version used when generating presigned URLs. 'unsigned' = s3proxy path
-// (proxy handles auth), 's3v4' = explicit SigV4, 'default' = no override set
-// (botocore default, may produce SigV2 without a region)
-type AdminGetS3ConfigResponsePresignedURLSignatureVersion string
-
-const (
-	AdminGetS3ConfigResponsePresignedURLSignatureVersionDefault  AdminGetS3ConfigResponsePresignedURLSignatureVersion = "default"
-	AdminGetS3ConfigResponsePresignedURLSignatureVersionS3v4     AdminGetS3ConfigResponsePresignedURLSignatureVersion = "s3v4"
-	AdminGetS3ConfigResponsePresignedURLSignatureVersionUnsigned AdminGetS3ConfigResponsePresignedURLSignatureVersion = "unsigned"
 )
 
 type AdminGetLicenseInfoParams struct {
