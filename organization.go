@@ -112,7 +112,7 @@ func (r *OrganizationService) Get(ctx context.Context, organizationID string, op
 }
 
 // Get usage for a specific organization.
-func (r *OrganizationService) GetUsage(ctx context.Context, organizationID string, query OrganizationGetUsageParams, opts ...option.RequestOption) (res *OrganizationGetUsageResponse, err error) {
+func (r *OrganizationService) GetUsage(ctx context.Context, organizationID string, query OrganizationGetUsageParams, opts ...option.RequestOption) (res *UsageAndPlan, err error) {
 	opts = slices.Concat(r.options, opts)
 	if organizationID == "" {
 		err = errors.New("missing required organization_id parameter")
@@ -263,46 +263,10 @@ func (r *RolePermission) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Schema for a user's role in an organization.
-type UserOrganizationRole struct {
-	// Unique identifier
-	ID string `json:"id" api:"required" format:"uuid"`
-	// The organization's ID.
-	OrganizationID string `json:"organization_id" api:"required" format:"uuid"`
-	// The role.
-	Role Role `json:"role" api:"required"`
-	// The user's ID.
-	UserID string `json:"user_id" api:"required"`
-	// Creation datetime
-	CreatedAt time.Time `json:"created_at" api:"nullable" format:"date-time"`
-	// The project ID scope.
-	ProjectIDs []string `json:"project_ids" api:"nullable" format:"uuid"`
-	// Update datetime
-	UpdatedAt time.Time `json:"updated_at" api:"nullable" format:"date-time"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		ID             respjson.Field
-		OrganizationID respjson.Field
-		Role           respjson.Field
-		UserID         respjson.Field
-		CreatedAt      respjson.Field
-		ProjectIDs     respjson.Field
-		UpdatedAt      respjson.Field
-		ExtraFields    map[string]respjson.Field
-		raw            string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r UserOrganizationRole) RawJSON() string { return r.JSON.raw }
-func (r *UserOrganizationRole) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type OrganizationGetUsageResponse struct {
-	Plan OrganizationGetUsageResponsePlan `json:"plan" api:"required"`
+type UsageAndPlan struct {
+	Plan UsageAndPlanPlan `json:"plan" api:"required"`
 	// Account usage totals shown alongside the plan.
-	Usage OrganizationGetUsageResponseUsage `json:"usage" api:"required"`
+	Usage UsageAndPlanUsage `json:"usage" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Plan        respjson.Field
@@ -313,13 +277,13 @@ type OrganizationGetUsageResponse struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r OrganizationGetUsageResponse) RawJSON() string { return r.JSON.raw }
-func (r *OrganizationGetUsageResponse) UnmarshalJSON(data []byte) error {
+func (r UsageAndPlan) RawJSON() string { return r.JSON.raw }
+func (r *UsageAndPlan) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type OrganizationGetUsageResponsePlan struct {
-	Limits OrganizationGetUsageResponsePlanLimits `json:"limits" api:"required"`
+type UsageAndPlanPlan struct {
+	Limits UsageAndPlanPlanLimits `json:"limits" api:"required"`
 	// Any of "contract", "plan".
 	MetronomePlanType      string `json:"metronome_plan_type" api:"required"`
 	MetronomeRateCardAlias string `json:"metronome_rate_card_alias" api:"required"`
@@ -332,7 +296,7 @@ type OrganizationGetUsageResponsePlan struct {
 	// The ID of the plan in Metronome
 	ID string `json:"id" api:"nullable"`
 	// The current billing period
-	CurrentBillingPeriod OrganizationGetUsageResponsePlanCurrentBillingPeriod `json:"current_billing_period" api:"nullable"`
+	CurrentBillingPeriod UsageAndPlanPlanCurrentBillingPeriod `json:"current_billing_period" api:"nullable"`
 	// The date the plan ends on
 	EndingBefore time.Time `json:"ending_before" api:"nullable" format:"date-time"`
 	// The number of payment failures for this organization
@@ -340,8 +304,8 @@ type OrganizationGetUsageResponsePlan struct {
 	// Whether the organization has a failed payment that requires support contact
 	IsPaymentFailed bool `json:"is_payment_failed"`
 	// The ID of the customer in Metronome
-	MetronomeCustomerID string                                            `json:"metronome_customer_id" api:"nullable"`
-	RecurringCredits    []OrganizationGetUsageResponsePlanRecurringCredit `json:"recurring_credits" api:"nullable"`
+	MetronomeCustomerID string                            `json:"metronome_customer_id" api:"nullable"`
+	RecurringCredits    []UsageAndPlanPlanRecurringCredit `json:"recurring_credits" api:"nullable"`
 	// The date the plan starts on
 	StartingOn time.Time `json:"starting_on" api:"nullable" format:"date-time"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -365,12 +329,12 @@ type OrganizationGetUsageResponsePlan struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r OrganizationGetUsageResponsePlan) RawJSON() string { return r.JSON.raw }
-func (r *OrganizationGetUsageResponsePlan) UnmarshalJSON(data []byte) error {
+func (r UsageAndPlanPlan) RawJSON() string { return r.JSON.raw }
+func (r *UsageAndPlanPlan) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type OrganizationGetUsageResponsePlanLimits struct {
+type UsageAndPlanPlanLimits struct {
 	// Whether usage is allowed after credit grants are exhausted
 	AllowPayAsYouGo               bool  `json:"allow_pay_as_you_go" api:"required"`
 	MaxConcurrentIndexJobs        int64 `json:"max_concurrent_index_jobs" api:"required"`
@@ -435,13 +399,13 @@ type OrganizationGetUsageResponsePlanLimits struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r OrganizationGetUsageResponsePlanLimits) RawJSON() string { return r.JSON.raw }
-func (r *OrganizationGetUsageResponsePlanLimits) UnmarshalJSON(data []byte) error {
+func (r UsageAndPlanPlanLimits) RawJSON() string { return r.JSON.raw }
+func (r *UsageAndPlanPlanLimits) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The current billing period
-type OrganizationGetUsageResponsePlanCurrentBillingPeriod struct {
+type UsageAndPlanPlanCurrentBillingPeriod struct {
 	EndDate   time.Time `json:"end_date" api:"required" format:"date-time"`
 	StartDate time.Time `json:"start_date" api:"required" format:"date-time"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -454,16 +418,16 @@ type OrganizationGetUsageResponsePlanCurrentBillingPeriod struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r OrganizationGetUsageResponsePlanCurrentBillingPeriod) RawJSON() string { return r.JSON.raw }
-func (r *OrganizationGetUsageResponsePlanCurrentBillingPeriod) UnmarshalJSON(data []byte) error {
+func (r UsageAndPlanPlanCurrentBillingPeriod) RawJSON() string { return r.JSON.raw }
+func (r *UsageAndPlanPlanCurrentBillingPeriod) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type OrganizationGetUsageResponsePlanRecurringCredit struct {
-	CreditAmount int64                                                     `json:"credit_amount" api:"required"`
-	CreditType   OrganizationGetUsageResponsePlanRecurringCreditCreditType `json:"credit_type" api:"required"`
-	Name         string                                                    `json:"name" api:"required"`
-	Priority     float64                                                   `json:"priority" api:"required"`
+type UsageAndPlanPlanRecurringCredit struct {
+	CreditAmount int64                                     `json:"credit_amount" api:"required"`
+	CreditType   UsageAndPlanPlanRecurringCreditCreditType `json:"credit_type" api:"required"`
+	Name         string                                    `json:"name" api:"required"`
+	Priority     float64                                   `json:"priority" api:"required"`
 	// The ID of the product in Metronome used to represent the credit grant
 	ProductID string `json:"product_id" api:"required"`
 	// The fraction of the credit that will roll over to the next period, between 0 and
@@ -486,12 +450,12 @@ type OrganizationGetUsageResponsePlanRecurringCredit struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r OrganizationGetUsageResponsePlanRecurringCredit) RawJSON() string { return r.JSON.raw }
-func (r *OrganizationGetUsageResponsePlanRecurringCredit) UnmarshalJSON(data []byte) error {
+func (r UsageAndPlanPlanRecurringCredit) RawJSON() string { return r.JSON.raw }
+func (r *UsageAndPlanPlanRecurringCredit) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type OrganizationGetUsageResponsePlanRecurringCreditCreditType struct {
+type UsageAndPlanPlanRecurringCreditCreditType struct {
 	ID   string `json:"id" api:"required"`
 	Name string `json:"name" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -504,25 +468,23 @@ type OrganizationGetUsageResponsePlanRecurringCreditCreditType struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r OrganizationGetUsageResponsePlanRecurringCreditCreditType) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *OrganizationGetUsageResponsePlanRecurringCreditCreditType) UnmarshalJSON(data []byte) error {
+func (r UsageAndPlanPlanRecurringCreditCreditType) RawJSON() string { return r.JSON.raw }
+func (r *UsageAndPlanPlanRecurringCreditCreditType) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Account usage totals shown alongside the plan.
-type OrganizationGetUsageResponseUsage struct {
+type UsageAndPlanUsage struct {
 	// Any of "configured_spend_limit_exceeded", "free_credits_exhausted",
 	// "has_spending_alert", "internal_spending_alert", "plan_spend_limit_exceeded",
 	// "plan_spend_limit_soft_alert".
-	ActiveAlerts                []string                                                  `json:"active_alerts"`
-	ActiveFreeCreditsUsage      []OrganizationGetUsageResponseUsageActiveFreeCreditsUsage `json:"active_free_credits_usage"`
-	CurrentInvoiceTotalUsdCents int64                                                     `json:"current_invoice_total_usd_cents" api:"nullable"`
-	TotalExtractionAgents       int64                                                     `json:"total_extraction_agents"`
-	TotalIndexedPages           int64                                                     `json:"total_indexed_pages"`
-	TotalIndexes                int64                                                     `json:"total_indexes"`
-	TotalUsers                  int64                                                     `json:"total_users"`
+	ActiveAlerts                []string                                  `json:"active_alerts"`
+	ActiveFreeCreditsUsage      []UsageAndPlanUsageActiveFreeCreditsUsage `json:"active_free_credits_usage"`
+	CurrentInvoiceTotalUsdCents int64                                     `json:"current_invoice_total_usd_cents" api:"nullable"`
+	TotalExtractionAgents       int64                                     `json:"total_extraction_agents"`
+	TotalIndexedPages           int64                                     `json:"total_indexed_pages"`
+	TotalIndexes                int64                                     `json:"total_indexes"`
+	TotalUsers                  int64                                     `json:"total_users"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ActiveAlerts                respjson.Field
@@ -538,12 +500,12 @@ type OrganizationGetUsageResponseUsage struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r OrganizationGetUsageResponseUsage) RawJSON() string { return r.JSON.raw }
-func (r *OrganizationGetUsageResponseUsage) UnmarshalJSON(data []byte) error {
+func (r UsageAndPlanUsage) RawJSON() string { return r.JSON.raw }
+func (r *UsageAndPlanUsage) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type OrganizationGetUsageResponseUsageActiveFreeCreditsUsage struct {
+type UsageAndPlanUsageActiveFreeCreditsUsage struct {
 	ExpiresAt        time.Time `json:"expires_at" api:"required" format:"date-time"`
 	GrantName        string    `json:"grant_name" api:"required"`
 	RemainingBalance int64     `json:"remaining_balance" api:"required"`
@@ -560,8 +522,44 @@ type OrganizationGetUsageResponseUsageActiveFreeCreditsUsage struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r OrganizationGetUsageResponseUsageActiveFreeCreditsUsage) RawJSON() string { return r.JSON.raw }
-func (r *OrganizationGetUsageResponseUsageActiveFreeCreditsUsage) UnmarshalJSON(data []byte) error {
+func (r UsageAndPlanUsageActiveFreeCreditsUsage) RawJSON() string { return r.JSON.raw }
+func (r *UsageAndPlanUsageActiveFreeCreditsUsage) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Schema for a user's role in an organization.
+type UserOrganizationRole struct {
+	// Unique identifier
+	ID string `json:"id" api:"required" format:"uuid"`
+	// The organization's ID.
+	OrganizationID string `json:"organization_id" api:"required" format:"uuid"`
+	// The role.
+	Role Role `json:"role" api:"required"`
+	// The user's ID.
+	UserID string `json:"user_id" api:"required"`
+	// Creation datetime
+	CreatedAt time.Time `json:"created_at" api:"nullable" format:"date-time"`
+	// The project ID scope.
+	ProjectIDs []string `json:"project_ids" api:"nullable" format:"uuid"`
+	// Update datetime
+	UpdatedAt time.Time `json:"updated_at" api:"nullable" format:"date-time"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		ID             respjson.Field
+		OrganizationID respjson.Field
+		Role           respjson.Field
+		UserID         respjson.Field
+		CreatedAt      respjson.Field
+		ProjectIDs     respjson.Field
+		UpdatedAt      respjson.Field
+		ExtraFields    map[string]respjson.Field
+		raw            string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r UserOrganizationRole) RawJSON() string { return r.JSON.raw }
+func (r *UserOrganizationRole) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
