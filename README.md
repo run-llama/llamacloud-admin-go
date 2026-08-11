@@ -19,11 +19,25 @@ import (
 )
 ```
 
-Or to pin the version:
+To install or update the SDK:
 
 ```sh
-go get -u 'github.com/run-llama/llamacloud-admin-go@v0.0.1'
+go get github.com/run-llama/llamacloud-admin-go@main
 ```
+
+This SDK is distributed from GitHub only. It is not published to a module registry and has no tagged
+releases, so `@main` — or an explicit commit SHA — is how you select a version.
+
+## Authentication
+
+Authenticate with a `LLAMA_CLOUD_API_KEY` belonging to an **organization admin**. On a self-hosted or
+BYOC deployment, use a key belonging to the deployment's global admin. The client reads it from the
+environment by default, or accepts it via `option.WithAPIKey`.
+
+## Base URL
+
+The client defaults to `https://api.cloud.llamaindex.ai`. Self-hosted and BYOC deployments must point
+it at their own host with `option.WithBaseURL`, or set `LLAMA_CLOUD_ADMIN_BASE_URL`.
 
 ## Requirements
 
@@ -494,14 +508,16 @@ You may also replace the default `http.Client` with
 accepted (this overwrites any previous client) and receives requests after any
 middleware has been applied.
 
-## Semantic versioning
+## Versioning
 
-This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:
+This SDK is distributed from this GitHub repository only. It is not published to a module registry and
+has no tags, releases, or changelog. Pin to a specific commit SHA for a reproducible build:
 
-1. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_
-2. Changes that we do not expect to impact the vast majority of users in practice.
+```sh
+go get github.com/run-llama/llamacloud-admin-go@<commit-sha>
+```
 
-We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
+The method surface tracks the LlamaCloud admin API and may change between commits.
 
 We are keen for your feedback; please open an [issue](https://www.github.com/run-llama/llamacloud-admin-go/issues) with questions, bugs, or suggestions.
 
