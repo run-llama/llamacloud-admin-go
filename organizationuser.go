@@ -124,18 +124,6 @@ func (r *OrganizationUserService) ListProjects(ctx context.Context, userID strin
 	return res, err
 }
 
-// Get the role of a user in an organization.
-func (r *OrganizationUserService) ListRoles(ctx context.Context, organizationID string, query OrganizationUserListRolesParams, opts ...option.RequestOption) (res *UserOrganizationRole, err error) {
-	opts = slices.Concat(r.options, opts)
-	if organizationID == "" {
-		err = errors.New("missing required organization_id parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("api/v1/organizations/%s/users/roles", organizationID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return res, err
-}
-
 // Remove a user from a project.
 func (r *OrganizationUserService) RemoveFromProject(ctx context.Context, projectID string, body OrganizationUserRemoveFromProjectParams, opts ...option.RequestOption) (res *OrganizationUserRemoveFromProjectResponse, err error) {
 	opts = slices.Concat(r.options, opts)
@@ -276,20 +264,6 @@ func (r *OrganizationUserAssignRoleParams) UnmarshalJSON(data []byte) error {
 type OrganizationUserListProjectsParams struct {
 	OrganizationID string `path:"organization_id" api:"required" format:"uuid" json:"-"`
 	paramObj
-}
-
-type OrganizationUserListRolesParams struct {
-	ProjectID param.Opt[string] `query:"project_id,omitzero" format:"uuid" json:"-"`
-	paramObj
-}
-
-// URLQuery serializes [OrganizationUserListRolesParams]'s query parameters as
-// `url.Values`.
-func (r OrganizationUserListRolesParams) URLQuery() (v url.Values, err error) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
-	})
 }
 
 type OrganizationUserRemoveFromProjectParams struct {

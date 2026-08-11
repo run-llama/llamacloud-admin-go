@@ -52,18 +52,6 @@ func (r *AdminUsageMetricService) Aggregate(ctx context.Context, query AdminUsag
 	return res, err
 }
 
-// Export usage metrics line by line as CSV over a date range. Global admin only.
-//
-// Each row is a single usage metric. Use the optional filters to scope the export
-// to an organization, project, user, or set of event types.
-func (r *AdminUsageMetricService) Export(ctx context.Context, query AdminUsageMetricExportParams, opts ...option.RequestOption) (err error) {
-	opts = slices.Concat(r.options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
-	path := "api/v1/admin/usage-metrics/export"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, nil, opts...)
-	return err
-}
-
 // Response containing usage metrics aggregated by one or more dimensions.
 type AdminUsageMetricAggregateResponse struct {
 	// The aggregation buckets, ordered by total credits descending
@@ -183,43 +171,6 @@ type AdminUsageMetricAggregateParams struct {
 // URLQuery serializes [AdminUsageMetricAggregateParams]'s query parameters as
 // `url.Values`.
 func (r AdminUsageMetricAggregateParams) URLQuery() (v url.Values, err error) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
-	})
-}
-
-type AdminUsageMetricExportParams struct {
-	// Inclusive lower bound on the day (YYYY-MM-DD, UTC)
-	DayOnOrAfter string `query:"day_on_or_after" api:"required" json:"-"`
-	// Inclusive upper bound on the day (YYYY-MM-DD, UTC)
-	DayOnOrBefore string `query:"day_on_or_before" api:"required" json:"-"`
-	// Filter by organization ID
-	OrganizationID param.Opt[string] `query:"organization_id,omitzero" json:"-"`
-	// Filter by project ID
-	ProjectID param.Opt[string] `query:"project_id,omitzero" json:"-"`
-	// Filter by user ID
-	UserID param.Opt[string] `query:"user_id,omitzero" json:"-"`
-	// Filter by event types
-	//
-	// Any of "audio_seconds_parsed", "chart_parsing_agentic",
-	// "chart_parsing_efficient", "chart_parsing_plus", "chat_message_sent",
-	// "confidence_score_high", "directory_count_snapshot",
-	// "directory_file_count_snapshot", "directory_files_exported",
-	// "directory_files_ingested", "directory_pages_exported", "extraction_num_pages",
-	// "form_parsing_pages", "image_classified", "index_retrieve_query",
-	// "layout_aware_chart_extraction", "layout_aware_parsing", "layout_extracted",
-	// "pages_classified", "pages_embedded", "pages_indexed", "pages_parsed",
-	// "pages_split", "pages_verified", "precise_bbox_extraction", "set_total_indexes",
-	// "set_total_pages_indexed", "spreadsheet_regions_extracted", "stored_file_count",
-	// "stored_file_mb".
-	EventTypes []string `query:"event_types,omitzero" json:"-"`
-	paramObj
-}
-
-// URLQuery serializes [AdminUsageMetricExportParams]'s query parameters as
-// `url.Values`.
-func (r AdminUsageMetricExportParams) URLQuery() (v url.Values, err error) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
