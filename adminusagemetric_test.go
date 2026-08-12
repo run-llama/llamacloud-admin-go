@@ -8,9 +8,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/run-llama/llamacloud-admin-go"
-	"github.com/run-llama/llamacloud-admin-go/internal/testutil"
-	"github.com/run-llama/llamacloud-admin-go/option"
+	"github.com/run-llama/llama-cloud-admin-go"
+	"github.com/run-llama/llama-cloud-admin-go/internal/testutil"
+	"github.com/run-llama/llama-cloud-admin-go/option"
 )
 
 func TestAdminUsageMetricAggregateWithOptionalParams(t *testing.T) {
@@ -30,6 +30,36 @@ func TestAdminUsageMetricAggregateWithOptionalParams(t *testing.T) {
 		DayOnOrAfter:   "day_on_or_after",
 		DayOnOrBefore:  "day_on_or_before",
 		GroupBy:        []string{"string"},
+		EventTypes:     []string{"audio_seconds_parsed", "chart_parsing_agentic"},
+		OrganizationID: llamacloudadmin.String("organization_id"),
+		ProjectID:      llamacloudadmin.String("project_id"),
+		UserID:         llamacloudadmin.String("user_id"),
+	})
+	if err != nil {
+		var apierr *llamacloudadmin.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestAdminUsageMetricExportWithOptionalParams(t *testing.T) {
+	t.Skip("Mock server tests are disabled")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := llamacloudadmin.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
+	)
+	err := client.Admin.UsageMetrics.Export(context.TODO(), llamacloudadmin.AdminUsageMetricExportParams{
+		DayOnOrAfter:   "day_on_or_after",
+		DayOnOrBefore:  "day_on_or_before",
 		EventTypes:     []string{"audio_seconds_parsed", "chart_parsing_agentic"},
 		OrganizationID: llamacloudadmin.String("organization_id"),
 		ProjectID:      llamacloudadmin.String("project_id"),

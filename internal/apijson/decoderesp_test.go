@@ -2,8 +2,8 @@ package apijson_test
 
 import (
 	"encoding/json"
-	"github.com/run-llama/llamacloud-admin-go/internal/apijson"
-	"github.com/run-llama/llamacloud-admin-go/packages/respjson"
+	"github.com/run-llama/llama-cloud-admin-go/internal/apijson"
+	"github.com/run-llama/llama-cloud-admin-go/packages/respjson"
 	"testing"
 )
 

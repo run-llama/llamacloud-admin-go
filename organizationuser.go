@@ -11,13 +11,13 @@ import (
 	"slices"
 	"time"
 
-	"github.com/run-llama/llamacloud-admin-go/internal/apijson"
-	"github.com/run-llama/llamacloud-admin-go/internal/apiquery"
-	shimjson "github.com/run-llama/llamacloud-admin-go/internal/encoding/json"
-	"github.com/run-llama/llamacloud-admin-go/internal/requestconfig"
-	"github.com/run-llama/llamacloud-admin-go/option"
-	"github.com/run-llama/llamacloud-admin-go/packages/param"
-	"github.com/run-llama/llamacloud-admin-go/packages/respjson"
+	"github.com/run-llama/llama-cloud-admin-go/internal/apijson"
+	"github.com/run-llama/llama-cloud-admin-go/internal/apiquery"
+	shimjson "github.com/run-llama/llama-cloud-admin-go/internal/encoding/json"
+	"github.com/run-llama/llama-cloud-admin-go/internal/requestconfig"
+	"github.com/run-llama/llama-cloud-admin-go/option"
+	"github.com/run-llama/llama-cloud-admin-go/packages/param"
+	"github.com/run-llama/llama-cloud-admin-go/packages/respjson"
 )
 
 // OrganizationUserService contains methods and other services that help with
@@ -121,6 +121,18 @@ func (r *OrganizationUserService) ListProjects(ctx context.Context, userID strin
 	}
 	path := fmt.Sprintf("api/v1/organizations/%s/users/%s/projects", query.OrganizationID, url.PathEscape(userID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return res, err
+}
+
+// Get the role of a user in an organization.
+func (r *OrganizationUserService) ListRoles(ctx context.Context, organizationID string, query OrganizationUserListRolesParams, opts ...option.RequestOption) (res *UserOrganizationRole, err error) {
+	opts = slices.Concat(r.options, opts)
+	if organizationID == "" {
+		err = errors.New("missing required organization_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("api/v1/organizations/%s/users/roles", organizationID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return res, err
 }
 
@@ -264,6 +276,20 @@ func (r *OrganizationUserAssignRoleParams) UnmarshalJSON(data []byte) error {
 type OrganizationUserListProjectsParams struct {
 	OrganizationID string `path:"organization_id" api:"required" format:"uuid" json:"-"`
 	paramObj
+}
+
+type OrganizationUserListRolesParams struct {
+	ProjectID param.Opt[string] `query:"project_id,omitzero" format:"uuid" json:"-"`
+	paramObj
+}
+
+// URLQuery serializes [OrganizationUserListRolesParams]'s query parameters as
+// `url.Values`.
+func (r OrganizationUserListRolesParams) URLQuery() (v url.Values, err error) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
 }
 
 type OrganizationUserRemoveFromProjectParams struct {

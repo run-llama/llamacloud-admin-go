@@ -1,4 +1,4 @@
-module github.com/run-llama/llamacloud-admin-go
+module github.com/run-llama/llama-cloud-admin-go
 
 go 1.22
 

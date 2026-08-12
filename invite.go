@@ -11,13 +11,13 @@ import (
 	"slices"
 	"time"
 
-	"github.com/run-llama/llamacloud-admin-go/internal/apijson"
-	"github.com/run-llama/llamacloud-admin-go/internal/apiquery"
-	"github.com/run-llama/llamacloud-admin-go/internal/requestconfig"
-	"github.com/run-llama/llamacloud-admin-go/option"
-	"github.com/run-llama/llamacloud-admin-go/packages/pagination"
-	"github.com/run-llama/llamacloud-admin-go/packages/param"
-	"github.com/run-llama/llamacloud-admin-go/packages/respjson"
+	"github.com/run-llama/llama-cloud-admin-go/internal/apijson"
+	"github.com/run-llama/llama-cloud-admin-go/internal/apiquery"
+	"github.com/run-llama/llama-cloud-admin-go/internal/requestconfig"
+	"github.com/run-llama/llama-cloud-admin-go/option"
+	"github.com/run-llama/llama-cloud-admin-go/packages/pagination"
+	"github.com/run-llama/llama-cloud-admin-go/packages/param"
+	"github.com/run-llama/llama-cloud-admin-go/packages/respjson"
 )
 
 // InviteService contains methods and other services that help with interacting
@@ -39,33 +39,8 @@ func NewInviteService(opts ...option.RequestOption) (r InviteService) {
 	return
 }
 
-// Accept a pending invitation. Returns the joined organization id.
-func (r *InviteService) Accept(ctx context.Context, inviteID string, opts ...option.RequestOption) (res *InviteAcceptResponse, err error) {
-	opts = slices.Concat(r.options, opts)
-	if inviteID == "" {
-		err = errors.New("missing required invite_id parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("api/v2/invites/%s/accept", url.PathEscape(inviteID))
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
-	return res, err
-}
-
-// Decline a pending invitation.
-func (r *InviteService) Decline(ctx context.Context, inviteID string, opts ...option.RequestOption) (err error) {
-	opts = slices.Concat(r.options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
-	if inviteID == "" {
-		err = errors.New("missing required invite_id parameter")
-		return err
-	}
-	path := fmt.Sprintf("api/v2/invites/%s", url.PathEscape(inviteID))
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return err
-}
-
 // List the current user's pending invitations, cursor-paginated.
-func (r *InviteService) ListMine(ctx context.Context, query InviteListMineParams, opts ...option.RequestOption) (res *pagination.PaginatedCursor[Invite], err error) {
+func (r *InviteService) List(ctx context.Context, query InviteListParams, opts ...option.RequestOption) (res *pagination.PaginatedCursor[Invite], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -83,8 +58,33 @@ func (r *InviteService) ListMine(ctx context.Context, query InviteListMineParams
 }
 
 // List the current user's pending invitations, cursor-paginated.
-func (r *InviteService) ListMineAutoPaging(ctx context.Context, query InviteListMineParams, opts ...option.RequestOption) *pagination.PaginatedCursorAutoPager[Invite] {
-	return pagination.NewPaginatedCursorAutoPager(r.ListMine(ctx, query, opts...))
+func (r *InviteService) ListAutoPaging(ctx context.Context, query InviteListParams, opts ...option.RequestOption) *pagination.PaginatedCursorAutoPager[Invite] {
+	return pagination.NewPaginatedCursorAutoPager(r.List(ctx, query, opts...))
+}
+
+// Decline a pending invitation.
+func (r *InviteService) Delete(ctx context.Context, inviteID string, opts ...option.RequestOption) (err error) {
+	opts = slices.Concat(r.options, opts)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
+	if inviteID == "" {
+		err = errors.New("missing required invite_id parameter")
+		return err
+	}
+	path := fmt.Sprintf("api/v2/invites/%s", url.PathEscape(inviteID))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
+	return err
+}
+
+// Accept a pending invitation. Returns the joined organization id.
+func (r *InviteService) Accept(ctx context.Context, inviteID string, opts ...option.RequestOption) (res *InviteAcceptResponse, err error) {
+	opts = slices.Concat(r.options, opts)
+	if inviteID == "" {
+		err = errors.New("missing required invite_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("api/v2/invites/%s/accept", url.PathEscape(inviteID))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
+	return res, err
 }
 
 // A pending invitation visible to the invitee.
@@ -138,14 +138,14 @@ func (r *InviteAcceptResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type InviteListMineParams struct {
+type InviteListParams struct {
 	PageSize  param.Opt[int64]  `query:"page_size,omitzero" json:"-"`
 	PageToken param.Opt[string] `query:"page_token,omitzero" json:"-"`
 	paramObj
 }
 
-// URLQuery serializes [InviteListMineParams]'s query parameters as `url.Values`.
-func (r InviteListMineParams) URLQuery() (v url.Values, err error) {
+// URLQuery serializes [InviteListParams]'s query parameters as `url.Values`.
+func (r InviteListParams) URLQuery() (v url.Values, err error) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,

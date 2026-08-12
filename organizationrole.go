@@ -9,8 +9,8 @@ import (
 	"net/http"
 	"slices"
 
-	"github.com/run-llama/llamacloud-admin-go/internal/requestconfig"
-	"github.com/run-llama/llamacloud-admin-go/option"
+	"github.com/run-llama/llama-cloud-admin-go/internal/requestconfig"
+	"github.com/run-llama/llama-cloud-admin-go/option"
 )
 
 // OrganizationRoleService contains methods and other services that help with

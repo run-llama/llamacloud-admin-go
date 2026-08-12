@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"net/http/httputil"
 
-	"github.com/run-llama/llamacloud-admin-go/internal/apijson"
-	"github.com/run-llama/llamacloud-admin-go/packages/respjson"
+	"github.com/run-llama/llama-cloud-admin-go/internal/apijson"
+	"github.com/run-llama/llama-cloud-admin-go/packages/respjson"
 )
 
 // Error represents an error that originates from the API, i.e. when a request is

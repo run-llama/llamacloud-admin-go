@@ -10,9 +10,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/run-llama/llamacloud-admin-go"
-	"github.com/run-llama/llamacloud-admin-go/internal"
-	"github.com/run-llama/llamacloud-admin-go/option"
+	"github.com/run-llama/llama-cloud-admin-go"
+	"github.com/run-llama/llama-cloud-admin-go/internal"
+	"github.com/run-llama/llama-cloud-admin-go/option"
 )
 
 type closureTransport struct {

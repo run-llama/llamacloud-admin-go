@@ -13,7 +13,7 @@ import (
 
 	"github.com/tidwall/sjson"
 
-	shimjson "github.com/run-llama/llamacloud-admin-go/internal/encoding/json"
+	shimjson "github.com/run-llama/llama-cloud-admin-go/internal/encoding/json"
 )
 
 var encoders sync.Map // map[encoderEntry]encoderFunc

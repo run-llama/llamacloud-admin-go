@@ -1,8 +1,8 @@
 package paramutil
 
 import (
-	"github.com/run-llama/llamacloud-admin-go/packages/param"
-	"github.com/run-llama/llamacloud-admin-go/packages/respjson"
+	"github.com/run-llama/llama-cloud-admin-go/packages/param"
+	"github.com/run-llama/llama-cloud-admin-go/packages/respjson"
 )
 
 func AddrIfPresent[T comparable](v param.Opt[T]) *T {

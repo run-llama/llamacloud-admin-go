@@ -3,8 +3,8 @@ package apijson_test
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/run-llama/llamacloud-admin-go/internal/apijson"
-	"github.com/run-llama/llamacloud-admin-go/packages/param"
+	"github.com/run-llama/llama-cloud-admin-go/internal/apijson"
+	"github.com/run-llama/llama-cloud-admin-go/packages/param"
 	"reflect"
 	"testing"
 )

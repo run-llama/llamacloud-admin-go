@@ -1,8 +1,8 @@
 package sentinel_test
 
 import (
-	"github.com/run-llama/llamacloud-admin-go/internal/encoding/json/sentinel"
-	"github.com/run-llama/llamacloud-admin-go/packages/param"
+	"github.com/run-llama/llama-cloud-admin-go/internal/encoding/json/sentinel"
+	"github.com/run-llama/llama-cloud-admin-go/packages/param"
 	"reflect"
 	"slices"
 	"testing"

@@ -1,7 +1,7 @@
 package apiquery
 
 import (
-	"github.com/run-llama/llamacloud-admin-go/packages/param"
+	"github.com/run-llama/llama-cloud-admin-go/packages/param"
 	"net/url"
 	"testing"
 	"time"

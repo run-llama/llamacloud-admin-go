@@ -9,8 +9,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/run-llama/llamacloud-admin-go/internal/requestconfig"
-	"github.com/run-llama/llamacloud-admin-go/option"
+	"github.com/run-llama/llama-cloud-admin-go/internal/requestconfig"
+	"github.com/run-llama/llama-cloud-admin-go/option"
 )
 
 // Client creates a struct with services and top level methods that help with
