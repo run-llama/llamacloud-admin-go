@@ -6,7 +6,7 @@
 
 <!-- x-release-please-end -->
 
-The Llama Cloud Admin Go library provides convenient access to the [Llama Cloud Admin REST API](https://developers.llamaindex.ai/)
+The Llama Cloud Admin Go library provides convenient access to the [Llama Cloud Admin REST API](https://admin.api.llamaindex.ai/)
 from applications written in Go.
 
 It is generated with [Stainless](https://www.stainless.com/).
