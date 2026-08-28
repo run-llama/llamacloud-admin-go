@@ -284,6 +284,9 @@ func (r *UsageAndPlan) UnmarshalJSON(data []byte) error {
 
 type UsageAndPlanPlan struct {
 	Limits UsageAndPlanPlanLimits `json:"limits" api:"required"`
+	// Any of "contract", "plan".
+	MetronomePlanType      string `json:"metronome_plan_type" api:"required"`
+	MetronomeRateCardAlias string `json:"metronome_rate_card_alias" api:"required"`
 	// Any of "enterprise", "enterprise_contract", "enterprise_poc", "free",
 	// "free_contract", "free_v1", "free_v2", "llama_parse", "pro", "pro_v1", "pro_v2",
 	// "starter_v1", "starter_v2", "unknown", "yc_deal_v1".
@@ -299,24 +302,29 @@ type UsageAndPlanPlan struct {
 	// The number of payment failures for this organization
 	FailureCount int64 `json:"failure_count"`
 	// Whether the organization has a failed payment that requires support contact
-	IsPaymentFailed  bool                              `json:"is_payment_failed"`
-	RecurringCredits []UsageAndPlanPlanRecurringCredit `json:"recurring_credits" api:"nullable"`
+	IsPaymentFailed bool `json:"is_payment_failed"`
+	// The ID of the customer in Metronome
+	MetronomeCustomerID string                            `json:"metronome_customer_id" api:"nullable"`
+	RecurringCredits    []UsageAndPlanPlanRecurringCredit `json:"recurring_credits" api:"nullable"`
 	// The date the plan starts on
 	StartingOn time.Time `json:"starting_on" api:"nullable" format:"date-time"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Limits               respjson.Field
-		Name                 respjson.Field
-		PlanFrequency        respjson.Field
-		ID                   respjson.Field
-		CurrentBillingPeriod respjson.Field
-		EndingBefore         respjson.Field
-		FailureCount         respjson.Field
-		IsPaymentFailed      respjson.Field
-		RecurringCredits     respjson.Field
-		StartingOn           respjson.Field
-		ExtraFields          map[string]respjson.Field
-		raw                  string
+		Limits                 respjson.Field
+		MetronomePlanType      respjson.Field
+		MetronomeRateCardAlias respjson.Field
+		Name                   respjson.Field
+		PlanFrequency          respjson.Field
+		ID                     respjson.Field
+		CurrentBillingPeriod   respjson.Field
+		EndingBefore           respjson.Field
+		FailureCount           respjson.Field
+		IsPaymentFailed        respjson.Field
+		MetronomeCustomerID    respjson.Field
+		RecurringCredits       respjson.Field
+		StartingOn             respjson.Field
+		ExtraFields            map[string]respjson.Field
+		raw                    string
 	} `json:"-"`
 }
 
