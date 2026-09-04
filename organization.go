@@ -481,7 +481,6 @@ type UsageAndPlanUsage struct {
 	ActiveAlerts                []string                                  `json:"active_alerts"`
 	ActiveFreeCreditsUsage      []UsageAndPlanUsageActiveFreeCreditsUsage `json:"active_free_credits_usage"`
 	CurrentInvoiceTotalUsdCents int64                                     `json:"current_invoice_total_usd_cents" api:"nullable"`
-	TotalExtractionAgents       int64                                     `json:"total_extraction_agents"`
 	TotalIndexedPages           int64                                     `json:"total_indexed_pages"`
 	TotalIndexes                int64                                     `json:"total_indexes"`
 	TotalUsers                  int64                                     `json:"total_users"`
@@ -490,7 +489,6 @@ type UsageAndPlanUsage struct {
 		ActiveAlerts                respjson.Field
 		ActiveFreeCreditsUsage      respjson.Field
 		CurrentInvoiceTotalUsdCents respjson.Field
-		TotalExtractionAgents       respjson.Field
 		TotalIndexedPages           respjson.Field
 		TotalIndexes                respjson.Field
 		TotalUsers                  respjson.Field
