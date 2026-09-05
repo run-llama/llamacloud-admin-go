@@ -481,7 +481,6 @@ type UsageAndPlanUsage struct {
 	ActiveAlerts                []string                                  `json:"active_alerts"`
 	ActiveFreeCreditsUsage      []UsageAndPlanUsageActiveFreeCreditsUsage `json:"active_free_credits_usage"`
 	CurrentInvoiceTotalUsdCents int64                                     `json:"current_invoice_total_usd_cents" api:"nullable"`
-	TotalIndexedPages           int64                                     `json:"total_indexed_pages"`
 	TotalIndexes                int64                                     `json:"total_indexes"`
 	TotalUsers                  int64                                     `json:"total_users"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -489,7 +488,6 @@ type UsageAndPlanUsage struct {
 		ActiveAlerts                respjson.Field
 		ActiveFreeCreditsUsage      respjson.Field
 		CurrentInvoiceTotalUsdCents respjson.Field
-		TotalIndexedPages           respjson.Field
 		TotalIndexes                respjson.Field
 		TotalUsers                  respjson.Field
 		ExtraFields                 map[string]respjson.Field
