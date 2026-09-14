@@ -109,6 +109,12 @@ func (r *OrganizationUserService) ListMembers(ctx context.Context, organizationI
 }
 
 // List all projects for a user in an organization.
+//
+// Deprecated: use
+// `GET /api/v2/organizations/{organization_id}/users/{user_id}/projects`, which is
+// paginated.
+//
+// Deprecated: deprecated
 func (r *OrganizationUserService) ListProjects(ctx context.Context, userID string, query OrganizationUserListProjectsParams, opts ...option.RequestOption) (res *[]OrganizationUserListProjectsResponse, err error) {
 	opts = slices.Concat(r.options, opts)
 	if query.OrganizationID == "" {
