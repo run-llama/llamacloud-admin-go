@@ -17,11 +17,13 @@ import (
 // interacting with the llama-cloud-admin API. You should not instantiate this
 // client directly, and instead use the [NewClient] method instead.
 type Client struct {
-	options       []option.RequestOption
-	Organizations OrganizationService
-	Projects      ProjectService
-	Invites       InviteService
-	Admin         AdminService
+	options         []option.RequestOption
+	Organizations   OrganizationService
+	Projects        ProjectService
+	Invites         InviteService
+	APIKeys         APIKeyService
+	QuotaManagement QuotaManagementService
+	Admin           AdminService
 }
 
 // DefaultClientOptions read from the environment (LLAMA_CLOUD_API_KEY,
@@ -57,6 +59,8 @@ func NewClient(opts ...option.RequestOption) (r Client) {
 	r.Organizations = NewOrganizationService(opts...)
 	r.Projects = NewProjectService(opts...)
 	r.Invites = NewInviteService(opts...)
+	r.APIKeys = NewAPIKeyService(opts...)
+	r.QuotaManagement = NewQuotaManagementService(opts...)
 	r.Admin = NewAdminService(opts...)
 
 	return
