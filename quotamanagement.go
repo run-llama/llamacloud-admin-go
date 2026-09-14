@@ -15,6 +15,7 @@ import (
 	"github.com/run-llama/llamacloud-admin-go/internal/apiquery"
 	"github.com/run-llama/llamacloud-admin-go/internal/requestconfig"
 	"github.com/run-llama/llamacloud-admin-go/option"
+	"github.com/run-llama/llamacloud-admin-go/packages/pagination"
 	"github.com/run-llama/llamacloud-admin-go/packages/param"
 	"github.com/run-llama/llamacloud-admin-go/packages/respjson"
 )
@@ -50,11 +51,28 @@ func (r *QuotaManagementService) New(ctx context.Context, params QuotaManagement
 // Retrieve a paginated list of quota configurations with optional filtering. When
 // expand=true, returns resolved quotas (effective values after fallback chain) and
 // pagination parameters are ignored.
-func (r *QuotaManagementService) List(ctx context.Context, query QuotaManagementListParams, opts ...option.RequestOption) (res *QuotaManagementListResponse, err error) {
+func (r *QuotaManagementService) List(ctx context.Context, query QuotaManagementListParams, opts ...option.RequestOption) (res *pagination.PaginatedPageNumber[QuotaConfiguration], err error) {
+	var raw *http.Response
 	opts = slices.Concat(r.options, opts)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "api/v1/beta/quota-management"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return res, err
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Retrieve a paginated list of quota configurations with optional filtering. When
+// expand=true, returns resolved quotas (effective values after fallback chain) and
+// pagination parameters are ignored.
+func (r *QuotaManagementService) ListAutoPaging(ctx context.Context, query QuotaManagementListParams, opts ...option.RequestOption) *pagination.PaginatedPageNumberAutoPager[QuotaConfiguration] {
+	return pagination.NewPaginatedPageNumberAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete a quota configuration by removing the override.
@@ -276,31 +294,6 @@ const (
 	QuotaConfigurationStatusActive   QuotaConfigurationStatus = "ACTIVE"
 	QuotaConfigurationStatusInactive QuotaConfigurationStatus = "INACTIVE"
 )
-
-// Paginated list of quota configurations.
-type QuotaManagementListResponse struct {
-	Items []QuotaConfiguration `json:"items" api:"required"`
-	Page  int64                `json:"page" api:"required"`
-	Pages int64                `json:"pages" api:"required"`
-	Size  int64                `json:"size" api:"required"`
-	Total int64                `json:"total" api:"required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Items       respjson.Field
-		Page        respjson.Field
-		Pages       respjson.Field
-		Size        respjson.Field
-		Total       respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r QuotaManagementListResponse) RawJSON() string { return r.JSON.raw }
-func (r *QuotaManagementListResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
 
 type QuotaManagementNewParams struct {
 	OrganizationID string `query:"organization_id" api:"required" format:"uuid" json:"-"`
