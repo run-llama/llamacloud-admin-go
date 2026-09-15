@@ -97,6 +97,12 @@ func (r *OrganizationUserService) AssignRole(ctx context.Context, organizationID
 }
 
 // Get all users in an organization.
+//
+// Deprecated: use `GET /api/v2/organizations/{organization_id}/users`, which is
+// paginated. This one collapses grants to members in memory after reading up to
+// 10,000 of them, so a large organization silently loses members.
+//
+// Deprecated: deprecated
 func (r *OrganizationUserService) ListMembers(ctx context.Context, organizationID string, opts ...option.RequestOption) (res *[]OrganizationMember, err error) {
 	opts = slices.Concat(r.options, opts)
 	if organizationID == "" {
