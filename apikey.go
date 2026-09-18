@@ -90,16 +90,15 @@ func (r *APIKeyService) ListAutoPaging(ctx context.Context, query APIKeyListPara
 // key-management permission on that project. Your own unscoped keys need only that
 // you own them. A project-scoped key revokes only within its own project, unscoped
 // keys included.
-func (r *APIKeyService) Delete(ctx context.Context, apiKeyID string, opts ...option.RequestOption) (err error) {
+func (r *APIKeyService) Delete(ctx context.Context, apiKeyID string, opts ...option.RequestOption) (res *APIKeyDeleteResponse, err error) {
 	opts = slices.Concat(r.options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if apiKeyID == "" {
 		err = errors.New("missing required api_key_id parameter")
-		return err
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v1/beta/api-keys/%s", apiKeyID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return err
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
+	return res, err
 }
 
 // Schema for an API Key.
@@ -150,6 +149,27 @@ const (
 	APIKeyKeyTypeAgent APIKeyKeyType = "agent"
 	APIKeyKeyTypeUser  APIKeyKeyType = "user"
 )
+
+// Confirmation that a resource was deleted.
+type APIKeyDeleteResponse struct {
+	// Maximum seconds until cached information expires
+	CacheTtlSeconds int64 `json:"cache_ttl_seconds" api:"required"`
+	// Whether the resource was deleted
+	Success bool `json:"success" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		CacheTtlSeconds respjson.Field
+		Success         respjson.Field
+		ExtraFields     map[string]respjson.Field
+		raw             string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r APIKeyDeleteResponse) RawJSON() string { return r.JSON.raw }
+func (r *APIKeyDeleteResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type APIKeyNewParams struct {
 	// When the API key should expire. If not set, the key never expires.
