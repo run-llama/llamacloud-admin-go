@@ -32,6 +32,7 @@ func TestAPIKeyNewWithOptionalParams(t *testing.T) {
 		KeyType:   llamacloudadmin.APIKeyNewParamsKeyTypeAgent,
 		Name:      llamacloudadmin.String("name"),
 		ProjectID: llamacloudadmin.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+		Role:      llamacloudadmin.APIKeyNewParamsRoleViewerV2,
 	})
 	if err != nil {
 		var apierr *llamacloudadmin.Error
