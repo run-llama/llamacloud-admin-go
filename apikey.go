@@ -118,6 +118,10 @@ type APIKey struct {
 	Metadata  map[string]any `json:"metadata" api:"nullable"`
 	Name      string         `json:"name" api:"nullable"`
 	ProjectID string         `json:"project_id" api:"nullable" format:"uuid"`
+	// Role capping what this key may do. Null if the key authorizes as its owner.
+	//
+	// Any of "admin", "agent_viewer", "viewer", "viewer_v2".
+	Role APIKeyRole `json:"role" api:"nullable"`
 	// Update datetime
 	UpdatedAt time.Time `json:"updated_at" api:"nullable" format:"date-time"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -131,6 +135,7 @@ type APIKey struct {
 		Metadata       respjson.Field
 		Name           respjson.Field
 		ProjectID      respjson.Field
+		Role           respjson.Field
 		UpdatedAt      respjson.Field
 		ExtraFields    map[string]respjson.Field
 		raw            string
@@ -148,6 +153,16 @@ type APIKeyKeyType string
 const (
 	APIKeyKeyTypeAgent APIKeyKeyType = "agent"
 	APIKeyKeyTypeUser  APIKeyKeyType = "user"
+)
+
+// Role capping what this key may do. Null if the key authorizes as its owner.
+type APIKeyRole string
+
+const (
+	APIKeyRoleAdmin       APIKeyRole = "admin"
+	APIKeyRoleAgentViewer APIKeyRole = "agent_viewer"
+	APIKeyRoleViewer      APIKeyRole = "viewer"
+	APIKeyRoleViewerV2    APIKeyRole = "viewer_v2"
 )
 
 // Confirmation that a resource was deleted.
@@ -177,6 +192,11 @@ type APIKeyNewParams struct {
 	Name      param.Opt[string]    `json:"name,omitzero"`
 	// The project ID to associate with the API key.
 	ProjectID param.Opt[string] `json:"project_id,omitzero" format:"uuid"`
+	// Role capping what this key may do. A key can only ever be narrower than the user
+	// who created it, never broader. If not set, the key authorizes as its owner.
+	//
+	// Any of "admin", "agent_viewer", "viewer", "viewer_v2".
+	Role APIKeyNewParamsRole `json:"role,omitzero"`
 	// Any of "agent", "user".
 	KeyType APIKeyNewParamsKeyType `json:"key_type,omitzero"`
 	paramObj
@@ -195,6 +215,17 @@ type APIKeyNewParamsKeyType string
 const (
 	APIKeyNewParamsKeyTypeAgent APIKeyNewParamsKeyType = "agent"
 	APIKeyNewParamsKeyTypeUser  APIKeyNewParamsKeyType = "user"
+)
+
+// Role capping what this key may do. A key can only ever be narrower than the user
+// who created it, never broader. If not set, the key authorizes as its owner.
+type APIKeyNewParamsRole string
+
+const (
+	APIKeyNewParamsRoleAdmin       APIKeyNewParamsRole = "admin"
+	APIKeyNewParamsRoleAgentViewer APIKeyNewParamsRole = "agent_viewer"
+	APIKeyNewParamsRoleViewer      APIKeyNewParamsRole = "viewer"
+	APIKeyNewParamsRoleViewerV2    APIKeyNewParamsRole = "viewer_v2"
 )
 
 type APIKeyListParams struct {
