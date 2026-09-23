@@ -84,7 +84,8 @@ func (r *OrganizationUserService) AddToProject(ctx context.Context, userID strin
 	return res, err
 }
 
-// Assign a role to a user in an organization.
+// Assign a role to a user in an organization, optionally limited to some of its
+// projects.
 func (r *OrganizationUserService) AssignRole(ctx context.Context, organizationID string, body OrganizationUserAssignRoleParams, opts ...option.RequestOption) (res *UserOrganizationRole, err error) {
 	opts = slices.Concat(r.options, opts)
 	if organizationID == "" {
@@ -262,6 +263,9 @@ type OrganizationUserAssignRoleParams struct {
 	RoleID string `json:"role_id" api:"required" format:"uuid"`
 	// The user's ID.
 	UserID string `json:"user_id" api:"required"`
+	// Projects to limit the role to. Empty: organization-wide, per-project roles
+	// removed. Omitted: organization-wide, per-project roles kept.
+	ProjectIDs []string `json:"project_ids,omitzero" format:"uuid"`
 	paramObj
 }
 
