@@ -111,7 +111,8 @@ func (r *OrganizationService) Get(ctx context.Context, organizationID string, op
 	return res, err
 }
 
-// Get usage for a specific organization.
+// Get usage for a specific organization. Pass `include=offers` to also compute
+// upgrade-offer eligibility.
 func (r *OrganizationService) GetUsage(ctx context.Context, organizationID string, query OrganizationGetUsageParams, opts ...option.RequestOption) (res *UsageAndPlan, err error) {
 	opts = slices.Concat(r.options, opts)
 	if organizationID == "" {
@@ -473,12 +474,16 @@ type UsageAndPlanUsage struct {
 	ActiveAlerts                []string                                  `json:"active_alerts"`
 	ActiveFreeCreditsUsage      []UsageAndPlanUsageActiveFreeCreditsUsage `json:"active_free_credits_usage"`
 	CurrentInvoiceTotalUsdCents int64                                     `json:"current_invoice_total_usd_cents" api:"nullable"`
-	TotalUsers                  int64                                     `json:"total_users"`
+	// Whether upgrading to Pro now would earn the one-time Pro bonus credits. Only
+	// computed when requested with include=offers.
+	ProUpgradeOfferEligible bool  `json:"pro_upgrade_offer_eligible"`
+	TotalUsers              int64 `json:"total_users"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ActiveAlerts                respjson.Field
 		ActiveFreeCreditsUsage      respjson.Field
 		CurrentInvoiceTotalUsdCents respjson.Field
+		ProUpgradeOfferEligible     respjson.Field
 		TotalUsers                  respjson.Field
 		ExtraFields                 map[string]respjson.Field
 		raw                         string
@@ -594,6 +599,8 @@ func (r OrganizationListParams) URLQuery() (v url.Values, err error) {
 
 type OrganizationGetUsageParams struct {
 	GetCurrentInvoiceTotal param.Opt[bool] `query:"get_current_invoice_total,omitzero" json:"-"`
+	// Any of "offers".
+	Include []string `query:"include,omitzero" json:"-"`
 	paramObj
 }
 
