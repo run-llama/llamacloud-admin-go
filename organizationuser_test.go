@@ -107,7 +107,7 @@ func TestOrganizationUserAddToProjectWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestOrganizationUserAssignRole(t *testing.T) {
+func TestOrganizationUserAssignRoleWithOptionalParams(t *testing.T) {
 	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -127,6 +127,7 @@ func TestOrganizationUserAssignRole(t *testing.T) {
 			OrganizationID: "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 			RoleID:         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 			UserID:         "user_id",
+			ProjectIDs:     []string{"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"},
 		},
 	)
 	if err != nil {
