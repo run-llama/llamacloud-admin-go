@@ -286,8 +286,8 @@ func (r *UsageAndPlan) UnmarshalJSON(data []byte) error {
 type UsageAndPlanPlan struct {
 	Limits UsageAndPlanPlanLimits `json:"limits" api:"required"`
 	// Any of "enterprise", "enterprise_contract", "enterprise_poc", "free",
-	// "free_contract", "free_v1", "free_v2", "llama_parse", "pro", "pro_v1", "pro_v2",
-	// "starter_v1", "starter_v2", "unknown", "yc_deal_v1".
+	// "free_contract", "free_v1", "free_v2", "llama_parse", "payg_v1", "pro",
+	// "pro_v1", "pro_v2", "starter_v1", "starter_v2", "unknown", "yc_deal_v1".
 	Name string `json:"name" api:"required"`
 	// Any of "ANNUAL", "MONTHLY", "QUARTERLY".
 	PlanFrequency string `json:"plan_frequency" api:"required"`
@@ -468,9 +468,9 @@ func (r *UsageAndPlanPlanRecurringCreditCreditType) UnmarshalJSON(data []byte) e
 
 // Account usage totals shown alongside the plan.
 type UsageAndPlanUsage struct {
-	// Any of "configured_spend_limit_exceeded", "free_credits_exhausted",
-	// "has_spending_alert", "internal_spending_alert", "plan_spend_limit_exceeded",
-	// "plan_spend_limit_soft_alert".
+	// Any of "auto_reload_failed", "configured_spend_limit_exceeded",
+	// "free_credits_exhausted", "has_spending_alert", "internal_spending_alert",
+	// "low_balance", "plan_spend_limit_exceeded", "plan_spend_limit_soft_alert".
 	ActiveAlerts                []string                                  `json:"active_alerts"`
 	ActiveFreeCreditsUsage      []UsageAndPlanUsageActiveFreeCreditsUsage `json:"active_free_credits_usage"`
 	CurrentInvoiceTotalUsdCents int64                                     `json:"current_invoice_total_usd_cents" api:"nullable"`
