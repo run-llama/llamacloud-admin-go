@@ -468,9 +468,9 @@ func (r *UsageAndPlanPlanRecurringCreditCreditType) UnmarshalJSON(data []byte) e
 
 // Account usage totals shown alongside the plan.
 type UsageAndPlanUsage struct {
-	// Any of "configured_spend_limit_exceeded", "free_credits_exhausted",
-	// "has_spending_alert", "internal_spending_alert", "plan_spend_limit_exceeded",
-	// "plan_spend_limit_soft_alert".
+	// Any of "auto_reload_failed", "configured_spend_limit_exceeded",
+	// "free_credits_exhausted", "has_spending_alert", "internal_spending_alert",
+	// "low_balance", "plan_spend_limit_exceeded", "plan_spend_limit_soft_alert".
 	ActiveAlerts                []string                                  `json:"active_alerts"`
 	ActiveFreeCreditsUsage      []UsageAndPlanUsageActiveFreeCreditsUsage `json:"active_free_credits_usage"`
 	CurrentInvoiceTotalUsdCents int64                                     `json:"current_invoice_total_usd_cents" api:"nullable"`
