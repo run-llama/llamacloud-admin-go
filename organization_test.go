@@ -13,7 +13,7 @@ import (
 	"github.com/run-llama/llamacloud-admin-go/option"
 )
 
-func TestOrganizationNew(t *testing.T) {
+func TestOrganizationNewWithOptionalParams(t *testing.T) {
 	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -27,7 +27,8 @@ func TestOrganizationNew(t *testing.T) {
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Organizations.New(context.TODO(), llamacloudadmin.OrganizationNewParams{
-		Name: "x",
+		Name:                 "x",
+		CreateDefaultProject: llamacloudadmin.Bool(true),
 	})
 	if err != nil {
 		var apierr *llamacloudadmin.Error
