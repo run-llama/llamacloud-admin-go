@@ -557,6 +557,8 @@ func (r *UserOrganizationRole) UnmarshalJSON(data []byte) error {
 type OrganizationNewParams struct {
 	// The organization's display name.
 	Name string `json:"name" api:"required"`
+	// Also create the organization's default project.
+	CreateDefaultProject param.Opt[bool] `json:"create_default_project,omitzero"`
 	paramObj
 }
 
