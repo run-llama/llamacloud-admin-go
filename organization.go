@@ -207,8 +207,6 @@ type Role struct {
 	ID string `json:"id" api:"required" format:"uuid"`
 	// A name for the role.
 	Name string `json:"name" api:"required"`
-	// The actual permissions of the role.
-	Permissions []RolePermission `json:"permissions" api:"required"`
 	// Creation datetime
 	CreatedAt time.Time `json:"created_at" api:"nullable" format:"date-time"`
 	// Update datetime
@@ -217,7 +215,6 @@ type Role struct {
 	JSON struct {
 		ID          respjson.Field
 		Name        respjson.Field
-		Permissions respjson.Field
 		CreatedAt   respjson.Field
 		UpdatedAt   respjson.Field
 		ExtraFields map[string]respjson.Field
@@ -228,39 +225,6 @@ type Role struct {
 // Returns the unmodified JSON received from the API
 func (r Role) RawJSON() string { return r.JSON.raw }
 func (r *Role) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Schema for a permission.
-type RolePermission struct {
-	// Unique identifier
-	ID string `json:"id" api:"required" format:"uuid"`
-	// Whether the permission is granted or not.
-	Access bool `json:"access" api:"required"`
-	// A description for the permission.
-	Description string `json:"description" api:"required"`
-	// A name for the permission.
-	Name string `json:"name" api:"required"`
-	// Creation datetime
-	CreatedAt time.Time `json:"created_at" api:"nullable" format:"date-time"`
-	// Update datetime
-	UpdatedAt time.Time `json:"updated_at" api:"nullable" format:"date-time"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		ID          respjson.Field
-		Access      respjson.Field
-		Description respjson.Field
-		Name        respjson.Field
-		CreatedAt   respjson.Field
-		UpdatedAt   respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r RolePermission) RawJSON() string { return r.JSON.raw }
-func (r *RolePermission) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
