@@ -157,11 +157,12 @@ type AdminUsageMetricAggregateParams struct {
 	// "chart_parsing_efficient", "chart_parsing_plus", "chat_message_sent",
 	// "confidence_score_high", "directory_count_snapshot",
 	// "directory_file_count_snapshot", "directory_files_exported",
-	// "directory_files_ingested", "directory_pages_exported", "extraction_num_pages",
-	// "form_parsing_pages", "image_classified", "index_retrieve_query",
-	// "layout_aware_chart_extraction", "layout_aware_parsing", "layout_extracted",
-	// "pages_classified", "pages_embedded", "pages_indexed", "pages_parsed",
-	// "pages_split", "pages_verified", "precise_bbox_extraction", "set_total_indexes",
+	// "directory_files_ingested", "directory_pages_exported",
+	// "extraction_effort_max_credits", "extraction_num_pages", "form_parsing_pages",
+	// "image_classified", "index_retrieve_query", "layout_aware_chart_extraction",
+	// "layout_aware_parsing", "layout_extracted", "pages_classified",
+	// "pages_embedded", "pages_indexed", "pages_parsed", "pages_split",
+	// "pages_verified", "precise_bbox_extraction", "set_total_indexes",
 	// "set_total_pages_indexed", "spreadsheet_regions_extracted", "stored_file_count",
 	// "stored_file_mb".
 	EventTypes []string `query:"event_types,omitzero" json:"-"`
