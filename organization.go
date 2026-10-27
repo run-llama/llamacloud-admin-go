@@ -112,7 +112,8 @@ func (r *OrganizationService) Get(ctx context.Context, organizationID string, op
 }
 
 // Get usage for a specific organization. Pass `include=offers` to also compute
-// upgrade-offer eligibility.
+// upgrade-offer eligibility, and `include=payment_failures` to also list the
+// plan's newest active payment failures.
 func (r *OrganizationService) GetUsage(ctx context.Context, organizationID string, query OrganizationGetUsageParams, opts ...option.RequestOption) (res *UsageAndPlan, err error) {
 	opts = slices.Concat(r.options, opts)
 	if organizationID == "" {
@@ -264,7 +265,10 @@ type UsageAndPlanPlan struct {
 	// The number of payment failures for this organization
 	FailureCount int64 `json:"failure_count"`
 	// Whether the organization has a failed payment that requires support contact
-	IsPaymentFailed  bool                              `json:"is_payment_failed"`
+	IsPaymentFailed bool `json:"is_payment_failed"`
+	// The newest active payment failures, newest first, at most 10; failure_count
+	// counts all of them. Only set when requested with include=payment_failures.
+	PaymentFailures  []UsageAndPlanPlanPaymentFailure  `json:"payment_failures" api:"nullable"`
 	RecurringCredits []UsageAndPlanPlanRecurringCredit `json:"recurring_credits" api:"nullable"`
 	// The date the plan starts on
 	StartingOn time.Time `json:"starting_on" api:"nullable" format:"date-time"`
@@ -278,6 +282,7 @@ type UsageAndPlanPlan struct {
 		EndingBefore         respjson.Field
 		FailureCount         respjson.Field
 		IsPaymentFailed      respjson.Field
+		PaymentFailures      respjson.Field
 		RecurringCredits     respjson.Field
 		StartingOn           respjson.Field
 		ExtraFields          map[string]respjson.Field
@@ -377,6 +382,27 @@ type UsageAndPlanPlanCurrentBillingPeriod struct {
 // Returns the unmodified JSON received from the API
 func (r UsageAndPlanPlanCurrentBillingPeriod) RawJSON() string { return r.JSON.raw }
 func (r *UsageAndPlanPlanCurrentBillingPeriod) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// One active payment failure on the organization's record.
+type UsageAndPlanPlanPaymentFailure struct {
+	// When the failure was recorded, in UTC
+	FailedAt time.Time `json:"failed_at" api:"required" format:"date-time"`
+	// The Stripe invoice whose payment failed. Null when the record has none.
+	InvoiceID string `json:"invoice_id" api:"nullable"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		FailedAt    respjson.Field
+		InvoiceID   respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r UsageAndPlanPlanPaymentFailure) RawJSON() string { return r.JSON.raw }
+func (r *UsageAndPlanPlanPaymentFailure) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -566,7 +592,7 @@ func (r OrganizationListParams) URLQuery() (v url.Values, err error) {
 
 type OrganizationGetUsageParams struct {
 	GetCurrentInvoiceTotal param.Opt[bool] `query:"get_current_invoice_total,omitzero" json:"-"`
-	// Any of "offers".
+	// Any of "offers", "payment_failures".
 	Include []string `query:"include,omitzero" json:"-"`
 	paramObj
 }
