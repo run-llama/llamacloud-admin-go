@@ -258,6 +258,9 @@ type UsageAndPlanPlan struct {
 	PlanFrequency string `json:"plan_frequency" api:"required"`
 	// The ID of the plan in Metronome
 	ID string `json:"id" api:"nullable"`
+	// US cents per 1,000 credits this organization pays for credit packs and
+	// auto-reloads now. Null when the plan buys no credits (Enterprise).
+	CreditPackRateUsdCentsPer1k float64 `json:"credit_pack_rate_usd_cents_per_1k" api:"nullable"`
 	// The current billing period
 	CurrentBillingPeriod UsageAndPlanPlanCurrentBillingPeriod `json:"current_billing_period" api:"nullable"`
 	// The date the plan ends on
@@ -274,19 +277,20 @@ type UsageAndPlanPlan struct {
 	StartingOn time.Time `json:"starting_on" api:"nullable" format:"date-time"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Limits               respjson.Field
-		Name                 respjson.Field
-		PlanFrequency        respjson.Field
-		ID                   respjson.Field
-		CurrentBillingPeriod respjson.Field
-		EndingBefore         respjson.Field
-		FailureCount         respjson.Field
-		IsPaymentFailed      respjson.Field
-		PaymentFailures      respjson.Field
-		RecurringCredits     respjson.Field
-		StartingOn           respjson.Field
-		ExtraFields          map[string]respjson.Field
-		raw                  string
+		Limits                      respjson.Field
+		Name                        respjson.Field
+		PlanFrequency               respjson.Field
+		ID                          respjson.Field
+		CreditPackRateUsdCentsPer1k respjson.Field
+		CurrentBillingPeriod        respjson.Field
+		EndingBefore                respjson.Field
+		FailureCount                respjson.Field
+		IsPaymentFailed             respjson.Field
+		PaymentFailures             respjson.Field
+		RecurringCredits            respjson.Field
+		StartingOn                  respjson.Field
+		ExtraFields                 map[string]respjson.Field
+		raw                         string
 	} `json:"-"`
 }
 
