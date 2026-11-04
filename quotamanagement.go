@@ -114,10 +114,11 @@ type QuotaConfiguration struct {
 	// "rate_limit_directory_ingest_project_job_creation",
 	// "rate_limit_extract_agent_creation", "rate_limit_extract_api_creation",
 	// "rate_limit_extract_api_list", "rate_limit_extract_api_query",
-	// "rate_limit_extract_concurrent_default", "rate_limit_file_api_read",
-	// "rate_limit_file_api_write", "rate_limit_index_v1_pipeline_concurrent_jobs",
-	// "rate_limit_parse_api_creation", "rate_limit_parse_api_list",
-	// "rate_limit_parse_api_query", "rate_limit_parse_concurrent_default",
+	// "rate_limit_extract_concurrent_default", "rate_limit_extract_review_api",
+	// "rate_limit_file_api_read", "rate_limit_file_api_write",
+	// "rate_limit_index_v1_pipeline_concurrent_jobs", "rate_limit_parse_api_creation",
+	// "rate_limit_parse_api_list", "rate_limit_parse_api_query",
+	// "rate_limit_parse_concurrent_default",
 	// "rate_limit_parse_concurrent_pages_agentic",
 	// "rate_limit_parse_concurrent_pages_agentic_plus",
 	// "rate_limit_parse_concurrent_pages_cost_effective",
@@ -223,6 +224,7 @@ const (
 	QuotaConfigurationConfigurationTypeRateLimitExtractAPIList                          QuotaConfigurationConfigurationType = "rate_limit_extract_api_list"
 	QuotaConfigurationConfigurationTypeRateLimitExtractAPIQuery                         QuotaConfigurationConfigurationType = "rate_limit_extract_api_query"
 	QuotaConfigurationConfigurationTypeRateLimitExtractConcurrentDefault                QuotaConfigurationConfigurationType = "rate_limit_extract_concurrent_default"
+	QuotaConfigurationConfigurationTypeRateLimitExtractReviewAPI                        QuotaConfigurationConfigurationType = "rate_limit_extract_review_api"
 	QuotaConfigurationConfigurationTypeRateLimitFileAPIRead                             QuotaConfigurationConfigurationType = "rate_limit_file_api_read"
 	QuotaConfigurationConfigurationTypeRateLimitFileAPIWrite                            QuotaConfigurationConfigurationType = "rate_limit_file_api_write"
 	QuotaConfigurationConfigurationTypeRateLimitIndexV1PipelineConcurrentJobs           QuotaConfigurationConfigurationType = "rate_limit_index_v1_pipeline_concurrent_jobs"
@@ -368,10 +370,11 @@ type QuotaManagementListParams struct {
 	// "rate_limit_directory_ingest_project_job_creation",
 	// "rate_limit_extract_agent_creation", "rate_limit_extract_api_creation",
 	// "rate_limit_extract_api_list", "rate_limit_extract_api_query",
-	// "rate_limit_extract_concurrent_default", "rate_limit_file_api_read",
-	// "rate_limit_file_api_write", "rate_limit_index_v1_pipeline_concurrent_jobs",
-	// "rate_limit_parse_api_creation", "rate_limit_parse_api_list",
-	// "rate_limit_parse_api_query", "rate_limit_parse_concurrent_default",
+	// "rate_limit_extract_concurrent_default", "rate_limit_extract_review_api",
+	// "rate_limit_file_api_read", "rate_limit_file_api_write",
+	// "rate_limit_index_v1_pipeline_concurrent_jobs", "rate_limit_parse_api_creation",
+	// "rate_limit_parse_api_list", "rate_limit_parse_api_query",
+	// "rate_limit_parse_concurrent_default",
 	// "rate_limit_parse_concurrent_pages_agentic",
 	// "rate_limit_parse_concurrent_pages_agentic_plus",
 	// "rate_limit_parse_concurrent_pages_cost_effective",
@@ -448,6 +451,7 @@ const (
 	QuotaManagementListParamsConfigurationTypeRateLimitExtractAPIList                          QuotaManagementListParamsConfigurationType = "rate_limit_extract_api_list"
 	QuotaManagementListParamsConfigurationTypeRateLimitExtractAPIQuery                         QuotaManagementListParamsConfigurationType = "rate_limit_extract_api_query"
 	QuotaManagementListParamsConfigurationTypeRateLimitExtractConcurrentDefault                QuotaManagementListParamsConfigurationType = "rate_limit_extract_concurrent_default"
+	QuotaManagementListParamsConfigurationTypeRateLimitExtractReviewAPI                        QuotaManagementListParamsConfigurationType = "rate_limit_extract_review_api"
 	QuotaManagementListParamsConfigurationTypeRateLimitFileAPIRead                             QuotaManagementListParamsConfigurationType = "rate_limit_file_api_read"
 	QuotaManagementListParamsConfigurationTypeRateLimitFileAPIWrite                            QuotaManagementListParamsConfigurationType = "rate_limit_file_api_write"
 	QuotaManagementListParamsConfigurationTypeRateLimitIndexV1PipelineConcurrentJobs           QuotaManagementListParamsConfigurationType = "rate_limit_index_v1_pipeline_concurrent_jobs"
