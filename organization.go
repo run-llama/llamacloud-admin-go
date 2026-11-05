@@ -252,7 +252,8 @@ type UsageAndPlanPlan struct {
 	Limits UsageAndPlanPlanLimits `json:"limits" api:"required"`
 	// Any of "enterprise", "enterprise_contract", "enterprise_poc", "free",
 	// "free_contract", "free_v1", "free_v2", "llama_parse", "payg_v1", "pro",
-	// "pro_v1", "pro_v2", "starter_v1", "starter_v2", "unknown", "yc_deal_v1".
+	// "pro_v1", "pro_v2", "sales_led_v1", "starter_v1", "starter_v2", "unknown",
+	// "yc_deal_v1".
 	Name string `json:"name" api:"required"`
 	// Any of "ANNUAL", "MONTHLY", "QUARTERLY".
 	PlanFrequency string `json:"plan_frequency" api:"required"`
