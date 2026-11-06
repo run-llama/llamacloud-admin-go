@@ -268,6 +268,9 @@ type UsageAndPlanPlan struct {
 	EndingBefore time.Time `json:"ending_before" api:"nullable" format:"date-time"`
 	// The number of payment failures for this organization
 	FailureCount int64 `json:"failure_count"`
+	// Whether the organization's plan failed to load; if so, the other fields hold the
+	// default plan.
+	IsFallback bool `json:"is_fallback"`
 	// Whether the organization has a failed payment that requires support contact
 	IsPaymentFailed bool `json:"is_payment_failed"`
 	// The newest active payment failures, newest first, at most 10; failure_count
@@ -286,6 +289,7 @@ type UsageAndPlanPlan struct {
 		CurrentBillingPeriod        respjson.Field
 		EndingBefore                respjson.Field
 		FailureCount                respjson.Field
+		IsFallback                  respjson.Field
 		IsPaymentFailed             respjson.Field
 		PaymentFailures             respjson.Field
 		RecurringCredits            respjson.Field
