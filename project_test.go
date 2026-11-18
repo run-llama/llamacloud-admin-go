@@ -85,7 +85,7 @@ func TestProjectListWithOptionalParams(t *testing.T) {
 	_, err := client.Projects.List(context.TODO(), llamacloudadmin.ProjectListParams{
 		Name:           llamacloudadmin.String("name"),
 		OrganizationID: llamacloudadmin.String("organization_id"),
-		PageSize:       llamacloudadmin.Int(0),
+		PageSize:       llamacloudadmin.Int(1),
 		PageToken:      llamacloudadmin.String("page_token"),
 	})
 	if err != nil {
