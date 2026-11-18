@@ -73,7 +73,7 @@ func TestInviteListMineWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Invites.ListMine(context.TODO(), llamacloudadmin.InviteListMineParams{
-		PageSize:  llamacloudadmin.Int(0),
+		PageSize:  llamacloudadmin.Int(1),
 		PageToken: llamacloudadmin.String("page_token"),
 	})
 	if err != nil {
