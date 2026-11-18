@@ -83,7 +83,7 @@ func TestOrganizationListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Organizations.List(context.TODO(), llamacloudadmin.OrganizationListParams{
 		Name:      llamacloudadmin.String("name"),
-		PageSize:  llamacloudadmin.Int(0),
+		PageSize:  llamacloudadmin.Int(1),
 		PageToken: llamacloudadmin.String("page_token"),
 	})
 	if err != nil {
